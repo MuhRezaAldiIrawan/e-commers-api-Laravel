@@ -510,6 +510,9 @@ Authorization: Bearer your-jwt-token
   }
 }
 ```
+![Screenshot](public/uploads/register.png)
+
+
 
 ##### Login
 - **POST** `/login`
