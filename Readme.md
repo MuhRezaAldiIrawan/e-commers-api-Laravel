@@ -668,11 +668,13 @@ Authorization: Bearer your-jwt-token
 }
 ```
 
-#### 5. Orders
+#### 5. Orders (Riwayat Pemesanan)
 
 ##### Get Order History
 - **GET** `/orders?per_page=10`
 - **Headers**: `X-API-KEY`, `Authorization: Bearer {token}`
+- **Query Parameters**:
+  - `per_page` (optional): Jumlah item per halaman (default: 10)
 - **Response**:
 ```json
 {
