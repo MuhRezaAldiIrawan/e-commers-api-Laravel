@@ -1,0 +1,5 @@
+{
+    "deploy": {
+        "postDeployCommand": "php artisan migrate --force"
+    }
+}
