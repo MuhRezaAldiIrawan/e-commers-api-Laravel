@@ -1,5 +1,10 @@
 {
-    "deploy": {
-        "postDeployCommand": "php artisan migrate --force"
-    }
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "composer install && npm install && npm run build"
+  },
+  "deploy": {
+    "startCommand": "php artisan serve --host=0.0.0.0 --port=$PORT",
+    "postDeployCommand": "php artisan migrate --force && php artisan storage:link"
+  }
 }
