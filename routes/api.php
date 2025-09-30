@@ -14,6 +14,8 @@ Route::middleware(['api.key'])->group(function () {
 });
 Route::post('/payment/webhook', [PaymentController::class, 'webhook']);
 
+
+
 Route::middleware(['api.key', 'auth:api'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);

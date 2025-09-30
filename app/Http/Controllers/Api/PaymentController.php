@@ -19,7 +19,7 @@ class PaymentController extends Controller
     public function __construct()
     {
         // Set Xendit API Key
-        Configuration::setXenditKey(env('XENDIT_SECRET_KEY'));
+        Configuration::setXenditKey(config('services.xendit.secret_key'));
 
         // Initialize Invoice API
         $this->invoiceApi = new InvoiceApi();
