@@ -524,33 +524,8 @@ Authorization: Bearer your-jwt-token
   "password": "password123"
 }
 ```
-- **Response**: Same as Register
+![Screenshot](public/uploads/login.png)
 
-##### Logout
-- **POST** `/logout`
-- **Headers**: `X-API-KEY`, `Authorization: Bearer {token}`
-- **Response**:
-```json
-{
-  "success": true,
-  "message": "Successfully logged out"
-}
-```
-
-##### Get Current User
-- **GET** `/me`
-- **Headers**: `X-API-KEY`, `Authorization: Bearer {token}`
-- **Response**:
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@example.com"
-  }
-}
-```
 
 #### 2. Products
 
@@ -576,23 +551,8 @@ Authorization: Bearer your-jwt-token
   }
 }
 ```
+![Screenshot](public/uploads/getproduct.png)
 
-##### Get Product Detail
-- **GET** `/products/{id}`
-- **Headers**: `X-API-KEY`, `Authorization: Bearer {token}`
-- **Response**:
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "name": "Laptop Gaming",
-    "description": "Laptop gaming dengan spesifikasi tinggi",
-    "price": "15000000.00",
-    "stock": 10
-  }
-}
-```
 
 #### 3. Checkout
 
@@ -629,6 +589,7 @@ Authorization: Bearer your-jwt-token
   }
 }
 ```
+![Screenshot](public/uploads/checkout.png)
 
 #### 4. Payment
 
@@ -658,6 +619,7 @@ Authorization: Bearer your-jwt-token
   }
 }
 ```
+![Screenshot](public/uploads/invoices.png)
 
 ##### Webhook (Xendit Callback)
 - **POST** `/payment/webhook`
@@ -670,6 +632,11 @@ Authorization: Bearer your-jwt-token
   "paid_at": "2024-01-01T10:00:00.000Z"
 }
 ```
+![Screenshot](public/uploads/payments.png)
+
+![Screenshot](public/uploads/successpayment.png)
+
+![Screenshot](public/uploads/pagesuccess.png)
 
 #### 5. Orders (Riwayat Pemesanan)
 
@@ -700,23 +667,7 @@ Authorization: Bearer your-jwt-token
 }
 ```
 
-##### Get Order Detail
-- **GET** `/orders/{id}`
-- **Headers**: `X-API-KEY`, `Authorization: Bearer {token}`
-- **Response**:
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "order_number": "ORD-ABC123",
-    "total_amount": "30250000.00",
-    "status": "paid",
-    "items": [...],
-    "payment": {...}
-  }
-}
-```
+![Screenshot](public/uploads/orders.png)
 
 ---
 
@@ -890,140 +841,6 @@ tail -f storage/logs/laravel.log
 ```
 
 ---
-
-## 🚀 Deployment (VPS/Cloud)
-
-### Requirements
-
-- VPS dengan Ubuntu 20.04/22.04
-- Domain (optional, bisa pakai IP)
-- SSL Certificate (gunakan Let's Encrypt)
-
-### Quick Deployment Steps
-
-#### 1. Setup Server
-
-```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
-
-# Install PHP 8.2
-sudo add-apt-repository ppa:ondrej/php -y
-sudo apt update
-sudo apt install php8.2 php8.2-fpm php8.2-mysql php8.2-mbstring php8.2-xml php8.2-curl php8.2-zip -y
-
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-
-# Install Nginx
-sudo apt install nginx -y
-
-# Install MySQL
-sudo apt install mysql-server -y
-```
-
-#### 2. Deploy Application
-
-```bash
-# Clone repository
-cd /var/www
-git clone <repository-url> ecommerce-api
-cd ecommerce-api
-
-# Install dependencies
-composer install --optimize-autoloader --no-dev
-
-# Setup permissions
-sudo chown -R www-data:www-data /var/www/ecommerce-api
-sudo chmod -R 755 /var/www/ecommerce-api
-sudo chmod -R 775 /var/www/ecommerce-api/storage
-sudo chmod -R 775 /var/www/ecommerce-api/bootstrap/cache
-```
-
-#### 3. Configure Environment
-
-```bash
-# Copy .env
-cp .env.example .env
-nano .env
-```
-
-Update `.env` untuk production:
-
-```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
-
-DB_DATABASE=ecommerce_api
-DB_USERNAME=your_db_user
-DB_PASSWORD=your_db_password
-
-API_KEY=production-api-key-here
-XENDIT_SECRET_KEY=xnd_production_xxxxx
-```
-
-#### 4. Run Migrations
-
-```bash
-php artisan key:generate
-php artisan jwt:secret
-php artisan migrate --force
-php artisan config:cache
-php artisan route:cache
-```
-
-#### 5. Configure Nginx
-
-Create `/etc/nginx/sites-available/ecommerce-api`:
-
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com;
-    root /var/www/ecommerce-api/public;
-
-    index index.php;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
-
-    location ~ /\.(?!well-known).* {
-        deny all;
-    }
-}
-```
-
-Enable site:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/ecommerce-api /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
-```
-
-#### 6. Setup SSL
-
-```bash
-sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d yourdomain.com
-```
-
-#### 7. Setup Webhook di Xendit
-
-Update webhook URL di Xendit Dashboard ke:
-```
-https://yourdomain.com/api/payment/webhook
-```
-
 ---
 
 ## 🐛 Troubleshooting
